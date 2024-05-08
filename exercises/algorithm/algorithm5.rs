@@ -1,14 +1,14 @@
 /*
-	bfs
-	This problem requires you to implement a basic BFS algorithm
+    bfs
+    This problem requires you to implement a basic BFS algorithm
 */
 
-//I AM NOT DONE
 use std::collections::VecDeque;
 
 // Define a graph
+#[derive(Debug)]
 struct Graph {
-    adj: Vec<Vec<usize>>, 
+    adj: Vec<Vec<usize>>,
 }
 
 impl Graph {
@@ -21,20 +21,51 @@ impl Graph {
 
     // Add an edge to the graph
     fn add_edge(&mut self, src: usize, dest: usize) {
-        self.adj[src].push(dest); 
-        self.adj[dest].push(src); 
+        self.adj[src].push(dest);
+        self.adj[dest].push(src);
     }
 
     // Perform a breadth-first search on the graph, return the order of visited nodes
     fn bfs_with_return(&self, start: usize) -> Vec<usize> {
-        
-		//TODO
+        //TODO
 
         let mut visit_order = vec![];
+        // visit_order.push(start);
+        let mut to_be_visited = VecDeque::new();
+        // self.adj[start].iter().map(|v| to_be_visited.push_back(v));
+        to_be_visited.push_back(&start);
+        while !to_be_visited.is_empty() {
+            let current_v = to_be_visited.pop_front();
+            // println!("-------------------{:?}-----------", current_v);
+            if let Some(current) = current_v {
+                if !visit_order.contains(current) {
+                    visit_order.push(*current);
+                    // println!("qqqqqqqqq-------------------{:?}-----------", current);
+                    // println!(
+                    //     "ttttttttt-------------------{:?}-----------",
+                    //     self.adj[*current]
+                    // );
+                    // println!("self-------------------{:#?}-----------", self);
+                    //方法1
+                    for v in self.adj[*current].iter() {
+                        if !to_be_visited.contains(&v) {
+                            to_be_visited.push_back(v)
+                        }
+                    }
+                    //方法2
+                    self.adj[*current].iter().map(|v| {
+                        println!("无法进入这里-------------------{:#?}-----------", v);
+                        if !to_be_visited.contains(&v) {
+                            to_be_visited.push_back(v)
+                        }
+                    });
+                }
+            }
+        }
+
         visit_order
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -84,4 +115,3 @@ mod tests {
         assert_eq!(visited_order, vec![0]);
     }
 }
-
